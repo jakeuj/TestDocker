@@ -6,9 +6,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <UserSecretsId>6ae92d89-061b-441e-b177-fe78022f0941</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
     <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
   </ItemGroup>
@@ -87,9 +89,6 @@
 
   <ItemGroup>
     <Content Remove="Localization\TestProj\*.json" />
-    <Content Include="..\.dockerignore">
-      <Link>.dockerignore</Link>
-    </Content>
     <EmbeddedResource Include="Localization\TestProj\*.json" />
   </ItemGroup>
 
