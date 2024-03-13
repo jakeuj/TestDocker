@@ -1,0 +1,43 @@
+﻿services:
+  kanban-postgres:
+    image: postgres
+    container_name: kanban-postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: myPassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - kanban-data:/var/lib/postgresql/data
+  migration:
+    image: testproj
+    build:
+      context: .
+      dockerfile: TestProj/Dockerfile
+    depends_on:
+      - kanban-postgres
+    container_name: migration
+    environment:
+      - DB_SERVER=kanban-postgres
+      - ConnectionStrings:Default=Host=kanban-postgres;Port=5432;Database=TestProj;User ID=root;Password=myPassword;
+    links:
+      - kanban-postgres
+    command: ["--migrate-database"]
+  testproj:
+    image: testproj
+    build:
+      context: .
+      dockerfile: TestProj/Dockerfile
+    depends_on:
+      - migration
+    container_name: test-proj
+    environment:
+      - DB_SERVER=kanban-postgres
+      - ConnectionStrings:Default=Host=kanban-postgres;Port=5432;Database=TestProj;User ID=root;Password=myPassword;
+    ports:
+      - 8080:8080
+    links:
+      - kanban-postgres
+    restart: on-failure
+volumes:
+  kanban-data:
